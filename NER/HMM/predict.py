@@ -31,3 +31,10 @@ recall = recall_score(labels, preds, average='macro')
 f1 = f1_score(labels, preds, average='macro')
 report = classification_report(labels, preds)
 print(report)
+
+import os
+result_file = "./output.txt"
+if os.path.exists(result_file):
+    os.remove(result_file)
+result_fp = open(result_file, "a+")
+result_fp.write("%s\n" % report)

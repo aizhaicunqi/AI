@@ -1,6 +1,8 @@
 import pickle
 from NER.utils import load_vocab, DataProcess
 from NER.CRF.model import sent2features
+from sklearn.metrics import precision_score, recall_score, f1_score, classification_report
+
 
 # load vocab and tag_vocab
 print("load vocab ...")
@@ -22,22 +24,25 @@ with open("./model.h5", "rb") as f:
 
 features = [sent2features(s) for s in word_lists]
 predicts = model.predict(features)
-print(predicts)
 
-result = []
+labels, preds = [], []
 for i in range(len(word_lists)):
     if len(word_lists[i]) != len(tag_lists[i]) != len(predicts[i]):
         print("error: ", i)
         continue
-    for j in range(len(word_lists[i])):
-        result.append("%s\t%s\t%s" % (word_lists[i][j], tag_lists[i][j], predicts[i][j]))
+    labels.extend(tag_lists[i])
+    preds.extend(predicts[i])
+
+precision = precision_score(labels, preds, average='macro')
+recall = recall_score(labels, preds, average='macro')
+f1 = f1_score(labels, preds, average='macro')
+report = classification_report(labels, preds)
+print(report)
 
 import os
-result_file = "./output_predict.txt"
+result_file = "./output.txt"
 if os.path.exists(result_file):
     os.remove(result_file)
 result_fp = open(result_file, "a+")
-for res in result:
-    result_fp.write("%s\n" % res)
-result_fp.close()
+result_fp.write("%s\n" % report)
 
