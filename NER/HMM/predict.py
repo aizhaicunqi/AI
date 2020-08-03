@@ -16,7 +16,7 @@ word_lists, tag_lists = dp.get_all_data()
 
 
 preds, labels = [], []
-total = len(tag_lists)
+total = len(tag_lists[:1000])
 for i in range(total):
     word_list = word_lists[i]
     tag_list = tag_lists[i]
