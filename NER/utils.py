@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def load_vocab(path):
     words = []
     for line in open(path):
@@ -51,7 +54,7 @@ class DataProcess(object):
                 inp_arr = inp.split("\t")
                 x.append(self.word2id.get(inp_arr[0], "<UNK>"))
                 y.append(self.tag2id.get(inp_arr[1], "<UNK>"))
-        return xs, ys
+        return np.array(xs), np.array(ys)
 
     def get_all_data(self):
         xs = []
@@ -73,4 +76,4 @@ class DataProcess(object):
                 inp_arr = inp.split("\t")
                 x.append(inp_arr[0])
                 y.append(inp_arr[1])
-        return xs, ys
+        return np.array(xs), np.array(ys)
